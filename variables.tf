@@ -1,13 +1,15 @@
 # >>> ACCESS
-variable "database_name" {
-  type        = string
-  description = "database name"
+variable "databases" {
+  type        = map(object({
+    database = string
+  }))
+  description = "databases object"
 }
 
-variable "database_owner" {
-  type        = string
-  description = "database owner"
-}
+#variable "database_owner" {
+#  type        = string
+#  description = "database owner"
+#}
 
 variable "create_access_user" {
   type        = bool
@@ -15,7 +17,9 @@ variable "create_access_user" {
   default     = false
 }
 variable "access_user" {
-  type        = string
+  type        = map(object({
+    database = string
+  }))
   description = "grantee user"
 }
 
@@ -41,13 +45,20 @@ variable "database_private_hostname" {
 # <<< DATABASE
 
 # >>> USER
-variable "username" {
-  type        = string
-  description = "user name"
+variable "user_role" {
+  type = map(object({
+    roles = list(string)
+  }))
 }
+#variable "username" {
+#  type        = string
+#  description = "user name"
+#}
 
 variable "roles" {
-  type        = list(string)
+  type        = map(object({
+    roles = list(string)
+  }))
   description = "user roles"
 }
 # <<< USER
