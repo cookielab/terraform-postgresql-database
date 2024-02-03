@@ -1,6 +1,6 @@
 #postgresql_role.owner_role.name
 output "database_owner" {
-  value = { 
+  value = {
     username = { for db in keys(var.databases) : db => module.database[db].database_owner.username }
     password = { for db in keys(var.databases) : db => module.database[db].database_owner.password }
   }

@@ -12,19 +12,46 @@ locals {
     database_rights = ["CONNECT"],
   }
 }
-module "database" {
-  source = "./database"
 
+module "database" {
   for_each = var.databases
+
+  source = "./database"
 
   database_name             = each.value.database
   database_private_hostname = var.database_private_hostname
 }
 
-module "user" {
-  source = "./user"
+module "access_rw" {
+  for_each = var.databases
 
+  source = "./access"
+
+  database_name      = each.value.database
+  database_owner     = module.database[each.key].database_owner.username
+  create_access_user = var.create_access_user
+  access_user        = "${each.value.database}_readwrite"
+  access_map         = local.database_readwrite_rights
+  depends_on         = [module.database]
+}
+
+module "access_ro" {
+  for_each = var.databases
+
+  source = "./access"
+
+  database_name      = each.value.database
+  database_owner     = module.database[each.key].database_owner.username
+  create_access_user = var.create_access_user
+  access_user        = "${each.value.database}_readonly"
+  access_map         = local.database_readonly_rights
+  depends_on         = [module.database]
+}
+
+module "user" {
   for_each = var.user_role
+
+  source = "./user"
 
   username = each.key
   roles    = each.value.roles
@@ -32,31 +59,4 @@ module "user" {
     module.access_rw,
     module.access_ro,
   ]
-
-}
-
-module "access_rw" {
-  source = "./access"
-
-  for_each = var.databases
-
-  database_name      = each.value.database
-  database_owner     = module.database[each.key].database_owner.username
-  create_access_user = var.create_access_user
-  access_user        = "${each.value.database}_readwrite"
-  access_map         = local.database_readwrite_rights
-  depends_on = [module.database]
-}
-
-module "access_ro" {
-  source = "./access"
-
-  for_each = var.databases
-
-  database_name      = each.value.database
-  database_owner     = module.database[each.key].database_owner.username
-  create_access_user = var.create_access_user
-  access_user        = "${each.value.database}_readonly"
-  access_map         = local.database_readonly_rights
-  depends_on = [module.database]
 }
