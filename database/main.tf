@@ -5,13 +5,13 @@ resource "random_password" "db_password" {
 }
 
 resource "postgresql_role" "owner_role" {
-  name     = var.database_name
+  name     = "${var.database_name}_migrator"
   login    = true
   password = random_password.db_password.result
 }
 
 resource "postgresql_database" "database" {
-  name              = postgresql_role.owner_role.name
+  name              = var.database_name
   owner             = postgresql_role.owner_role.name
   template          = "template0"
   lc_collate        = "en_US.UTF-8"
@@ -23,10 +23,10 @@ resource "postgresql_database" "database" {
 
 resource "postgresql_extension" "pg_trgm" {
   name     = "pg_trgm"
-  database = postgresql_role.owner_role.name
+  database = postgresql_database.database.name
 }
 
 resource "postgresql_extension" "uuid_ossp" {
   name     = "uuid-ossp"
-  database = postgresql_role.owner_role.name
+  database = postgresql_database.database.name
 }
