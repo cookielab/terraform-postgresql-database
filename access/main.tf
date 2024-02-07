@@ -1,6 +1,7 @@
 resource "postgresql_role" "this" {
   count = var.create_role ? 1 : 0
   name  = var.role_name
+  login = var.allow_login
 }
 
 resource "postgresql_grant" "tables" {

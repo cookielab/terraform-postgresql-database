@@ -41,6 +41,7 @@ module "access_rw" {
   database_owner = module.database[each.key].database_owner.username
   create_role    = var.create_role
   role_name      = "${each.value.database}_rw"
+  allow_login    = try(each.value.allow_login, true)
   access_map     = local.database_readwrite_rights
   depends_on     = [module.database]
 }
@@ -54,6 +55,7 @@ module "access_ro" {
   database_owner = module.database[each.key].database_owner.username
   create_role    = var.create_role
   role_name      = "${each.value.database}_ro"
+  allow_login    = try(each.value.allow_login, true)
   access_map     = local.database_readonly_rights
   depends_on     = [module.database]
 }

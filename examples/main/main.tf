@@ -8,13 +8,14 @@ locals {
   databases = {
     project_development_app = {
       database = "project_development"
-      owner = "custom_owner"
+      owner    = "custom_owner"
       roles = [
         "project_development_rw",
       ]
     }
     project_staging_app = {
-      database = "project_staging"
+      database    = "project_staging"
+      allow_login = false
       roles = [
         "project_staging_rw",
       ]

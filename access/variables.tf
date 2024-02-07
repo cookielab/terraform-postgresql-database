@@ -13,9 +13,14 @@ variable "create_role" {
   description = "create role"
   default     = false
 }
+
 variable "role_name" {
   type        = string
   description = "grantee user"
+}
+
+variable "allow_login" {
+  type = bool
 }
 
 variable "access_map" {

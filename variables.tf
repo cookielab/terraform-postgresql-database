@@ -1,8 +1,9 @@
 variable "databases" {
   type = map(object({
-    database = string
-    owner    = optional(string, null)
-    roles    = list(string)
+    database    = string
+    owner       = optional(string, null)
+    allow_login = optional(bool, true)
+    roles       = list(string)
   }))
   description = "databases object: { ACCESS_USER = { database = \"DBNAME\" roles = [ \"ROLE1\"] } … }"
 }
