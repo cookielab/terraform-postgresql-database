@@ -1,7 +1,17 @@
+resource "random_password" "this" {
+  count = var.allow_login ? 1 : 0
+
+  length           = 32
+  special          = false
+  override_special = "_%"
+}
+
 resource "postgresql_role" "this" {
   count = var.create_role ? 1 : 0
-  name  = var.role_name
-  login = var.allow_login
+
+  name     = var.role_name
+  login    = var.allow_login
+  password = var.allow_login ? random_password.this[0].result : null
 }
 
 resource "postgresql_grant" "tables" {

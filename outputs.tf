@@ -12,6 +12,14 @@ output "database_name" {
   description = "Object returning database names"
 }
 
+output "roles_rw" {
+  value = { for db in keys(var.databases) : db => module.access_rw[db] }
+}
+
+output "roles_ro" {
+  value = { for db in keys(var.databases) : db => module.access_ro[db] }
+}
+
 output "username" {
   value       = { for user in keys(var.user_role) : user => module.user[user].username }
   description = "Object returning usersnames"
