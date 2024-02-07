@@ -10,7 +10,7 @@ resource "postgresql_role" "owner" {
   password = random_password.owner.result
 }
 
-resource "postgresql_database" "database" {
+resource "postgresql_database" "this" {
   name              = var.database_name
   owner             = postgresql_role.owner.name
   template          = "template0"
@@ -23,10 +23,10 @@ resource "postgresql_database" "database" {
 
 resource "postgresql_extension" "pg_trgm" {
   name     = "pg_trgm"
-  database = postgresql_database.database.name
+  database = postgresql_database.this.name
 }
 
 resource "postgresql_extension" "uuid_ossp" {
   name     = "uuid-ossp"
-  database = postgresql_database.database.name
+  database = postgresql_database.this.name
 }

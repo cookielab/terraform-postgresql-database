@@ -7,5 +7,5 @@ output "database_owner" {
 }
 
 output "database_name" {
-  value = postgresql_database.database.name
+  value = postgresql_database.this.name
 }
