@@ -8,6 +8,7 @@ locals {
   databases = {
     project_development_app = {
       database = "project_development"
+      owner = "custom_owner"
       roles = [
         "project_development_rw",
       ]
@@ -40,7 +41,7 @@ provider "postgresql" {
   port            = "5432"
   superuser       = false
   database        = "postgres"
-  username        = "postgres"
+  username        = "jindraj"
   password        = ""
   sslmode         = "disable"
   connect_timeout = 15

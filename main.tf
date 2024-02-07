@@ -28,7 +28,8 @@ module "database" {
 
   source = "./database"
 
-  database_name = each.value.database
+  owner_username = each.value.owner
+  database_name  = each.value.database
 }
 
 module "access_rw" {
