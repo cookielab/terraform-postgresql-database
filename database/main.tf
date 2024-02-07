@@ -4,7 +4,7 @@ resource "random_password" "db_password" {
   override_special = "_%"
 }
 
-resource "postgresql_role" "owner_role" {
+resource "postgresql_role" "owner" {
   name     = "${var.database_name}_migrator"
   login    = true
   password = random_password.db_password.result
@@ -12,7 +12,7 @@ resource "postgresql_role" "owner_role" {
 
 resource "postgresql_database" "database" {
   name              = var.database_name
-  owner             = postgresql_role.owner_role.name
+  owner             = postgresql_role.owner.name
   template          = "template0"
   lc_collate        = "en_US.UTF-8"
   lc_ctype          = "en_US.UTF-8"
