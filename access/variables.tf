@@ -8,9 +8,9 @@ variable "database_owner" {
   description = "database owner"
 }
 
-variable "create_access_user" {
+variable "create_role" {
   type        = bool
-  description = "create access user"
+  description = "create role"
   default     = false
 }
 variable "access_user" {
