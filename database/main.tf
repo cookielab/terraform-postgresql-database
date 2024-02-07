@@ -1,4 +1,4 @@
-resource "random_password" "db_password" {
+resource "random_password" "owner" {
   length           = 32
   special          = false
   override_special = "_%"
@@ -7,7 +7,7 @@ resource "random_password" "db_password" {
 resource "postgresql_role" "owner" {
   name     = "${var.database_name}_migrator"
   login    = true
-  password = random_password.db_password.result
+  password = random_password.owner.result
 }
 
 resource "postgresql_database" "database" {
