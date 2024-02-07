@@ -13,7 +13,7 @@ variable "create_role" {
   description = "create role"
   default     = false
 }
-variable "access_user" {
+variable "role_name" {
   type        = string
   description = "grantee user"
 }

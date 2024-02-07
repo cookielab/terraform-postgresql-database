@@ -39,7 +39,7 @@ module "access_rw" {
   database_name      = each.value.database
   database_owner     = module.database[each.key].database_owner.username
   create_role        = var.create_role
-  access_user        = "${each.value.database}_rw"
+  role_name          = "${each.value.database}_rw"
   access_map         = local.database_readwrite_rights
   depends_on         = [module.database]
 }
@@ -52,7 +52,7 @@ module "access_ro" {
   database_name      = each.value.database
   database_owner     = module.database[each.key].database_owner.username
   create_role        = var.create_role
-  access_user        = "${each.value.database}_ro"
+  role_name          = "${each.value.database}_ro"
   access_map         = local.database_readonly_rights
   depends_on         = [module.database]
 }
