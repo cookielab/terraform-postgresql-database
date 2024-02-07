@@ -6,10 +6,10 @@ variable "databases" {
   description = "databases object: { ACCESS_USER = { database = \"DBNAME\" roles = [ \"ROLE1\"] } … }"
 }
 
-variable "create_access_user" {
+variable "create_role" {
   type        = bool
   default     = false
-  description = "Create access user"
+  description = "Create role"
 }
 
 variable "user_role" {
