@@ -28,7 +28,7 @@ module "database" {
 
   source = "./database"
 
-  database_name             = each.value.database
+  database_name = each.value.database
 }
 
 module "access_rw" {
@@ -36,12 +36,12 @@ module "access_rw" {
 
   source = "./access"
 
-  database_name      = each.value.database
-  database_owner     = module.database[each.key].database_owner.username
-  create_role        = var.create_role
-  role_name          = "${each.value.database}_rw"
-  access_map         = local.database_readwrite_rights
-  depends_on         = [module.database]
+  database_name  = each.value.database
+  database_owner = module.database[each.key].database_owner.username
+  create_role    = var.create_role
+  role_name      = "${each.value.database}_rw"
+  access_map     = local.database_readwrite_rights
+  depends_on     = [module.database]
 }
 
 module "access_ro" {
@@ -49,12 +49,12 @@ module "access_ro" {
 
   source = "./access"
 
-  database_name      = each.value.database
-  database_owner     = module.database[each.key].database_owner.username
-  create_role        = var.create_role
-  role_name          = "${each.value.database}_ro"
-  access_map         = local.database_readonly_rights
-  depends_on         = [module.database]
+  database_name  = each.value.database
+  database_owner = module.database[each.key].database_owner.username
+  create_role    = var.create_role
+  role_name      = "${each.value.database}_ro"
+  access_map     = local.database_readonly_rights
+  depends_on     = [module.database]
 }
 
 module "user" {
