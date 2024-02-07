@@ -29,7 +29,6 @@ module "database" {
   source = "./database"
 
   database_name             = each.value.database
-  database_private_hostname = var.database_private_hostname
 }
 
 module "access_rw" {

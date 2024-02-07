@@ -1,4 +1,3 @@
-#postgresql_role.owner_role.name
 output "database_owner" {
   value = {
     username = { for db in keys(var.databases) : db => module.database[db].database_owner.username }
@@ -11,12 +10,6 @@ output "database_owner" {
 output "database_name" {
   value       = { for db in keys(var.databases) : db => module.database[db].database_name }
   description = "Object returning database names"
-}
-
-output "connection_url" {
-  value       = { for db in keys(var.databases) : db => module.database[db].connection_url }
-  sensitive   = true
-  description = "Object returning connection strings"
 }
 
 output "username" {

@@ -12,11 +12,6 @@ variable "create_access_user" {
   description = "Create access user"
 }
 
-variable "database_private_hostname" {
-  type        = string
-  description = "Hostname used in connection_url output"
-}
-
 variable "user_role" {
   type = map(object({
     roles = list(string)
