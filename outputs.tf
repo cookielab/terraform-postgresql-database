@@ -1,4 +1,4 @@
-output "database_owner" {
+output "owner_user" {
   value = {
     username = module.database.username
     password = module.database.password
@@ -11,11 +11,11 @@ output "database_name" {
   description = "Object returning database names"
 }
 
-output "access_user" {
-  value = var.allow_login ? {
+output "app_user" {
+  value = {
     username = module.access_app.rolename
     password = module.access_app.password
-  } : null
+  }
 }
 
 output "roles" {

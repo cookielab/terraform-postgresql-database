@@ -6,11 +6,9 @@ terraform {
 locals {
   databases = {
     project_development = {
-      owner       = "custom_owner"
-      allow_login = true
+      owner = "custom_owner"
     }
     project_staging = {
-      allow_login = false
     }
   }
 
@@ -44,9 +42,7 @@ module "database" {
   for_each = local.databases
   source   = "../.."
 
-  allow_login = each.value.allow_login
-  database    = each.key
-  owner       = try(each.value.owner, "${each.key}_migrator")
-  create_role = true
+  database       = each.key
+  owner_username = try(each.value.owner, "${each.key}_migrator")
   #user_role   = local.users #merge(local.databases, local.users)
 }
