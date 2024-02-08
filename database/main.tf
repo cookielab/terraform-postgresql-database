@@ -5,7 +5,7 @@ resource "random_password" "owner" {
 }
 
 resource "postgresql_role" "owner" {
-  name     = var.owner_username == null ? "${var.database_name}_migrator" : var.owner_username
+  name = var.owner_username == null ? "${var.database_name}_migrator" : var.owner_username
   #name     = "${var.database_name}_migrator"
   login    = true
   password = random_password.owner.result

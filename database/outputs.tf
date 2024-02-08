@@ -1,8 +1,9 @@
-output "database_owner" {
-  value = {
-    username = postgresql_role.owner.name
-    password = random_password.owner.result
-  }
+output "username" {
+  value = postgresql_role.owner.name
+}
+
+output "password" {
+  value     = random_password.owner.result
   sensitive = true
 }
 

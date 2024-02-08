@@ -3,38 +3,30 @@ terraform {
   }
 }
 
-
 locals {
   databases = {
-    project_development_app = {
-      database = "project_development"
-      owner    = "custom_owner"
-      roles = [
-        "project_development_rw",
-      ]
+    project_development = {
+      owner       = "custom_owner"
+      allow_login = true
     }
-    project_staging_app = {
-      database    = "project_staging"
+    project_staging = {
       allow_login = false
-      roles = [
-        "project_staging_rw",
-      ]
     }
   }
 
-  users = {
-    joedoe = {
-      roles = [
-        "project_development_rw",
-        "project_staging_ro",
-      ]
-    }
-    karensmith = {
-      roles = [
-        "project_development_rw",
-      ]
-    }
-  }
+  #  users = {
+  #    joedoe = {
+  #      roles = [
+  #        "project_development_rw",
+  #        "project_staging_ro",
+  #      ]
+  #    }
+  #    karensmith = {
+  #      roles = [
+  #        "project_development_rw",
+  #      ]
+  #    }
+  #  }
 }
 
 provider "postgresql" {
@@ -49,9 +41,12 @@ provider "postgresql" {
 }
 
 module "database" {
-  source = "../.."
+  for_each = local.databases
+  source   = "../.."
 
-  databases   = local.databases
-  user_role   = merge(local.databases, local.users)
+  allow_login = each.value.allow_login
+  database    = each.key
+  owner       = try(each.value.owner, "${each.key}_migrator")
   create_role = true
+  #user_role   = local.users #merge(local.databases, local.users)
 }

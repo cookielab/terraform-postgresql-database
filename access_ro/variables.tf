@@ -22,13 +22,3 @@ variable "role_name" {
 variable "allow_login" {
   type = bool
 }
-
-variable "access_map" {
-  type = object({
-    table_rights    = list(string)
-    sequence_rights = list(string)
-    schema_rights   = list(string)
-    database_rights = list(string)
-    }
-  )
-}
