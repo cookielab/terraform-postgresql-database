@@ -25,7 +25,7 @@ module "access_ro" {
 
   database_name  = var.database
   database_owner = module.database.username
-  role_name      = "${var.database}_ro"
+  role_name      = var.role_ro_name != null ? var.role_ro_name : "${var.database}_ro"
   create_role    = true
   allow_login    = false
   access_map     = local.access_map_ro
@@ -37,7 +37,7 @@ module "access_rw" {
 
   database_name  = var.database
   database_owner = module.database.username
-  role_name      = "${var.database}_rw"
+  role_name      = var.role_rw_name != null ? var.role_rw_name : "${var.database}_rw"
   create_role    = true
   allow_login    = false
   access_map     = local.access_map_rw

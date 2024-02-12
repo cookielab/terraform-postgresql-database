@@ -6,10 +6,12 @@ terraform {
 locals {
   databases = {
     project_development = {
-      owner = "custom_owner"
+      owner        = "custom_owner"
+      app_username = "custom_app"
+      role_ro_name = "custom_reader"
+      role_rw_name = "custom_writer"
     }
-    project_staging = {
-    }
+    project_staging = {}
   }
 
   #  users = {
@@ -43,6 +45,9 @@ module "database" {
   source   = "../.."
 
   database       = each.key
-  owner_username = try(each.value.owner, "${each.key}_migrator")
+  owner_username = try(each.value.owner, null)
+  app_username   = try(each.value.app_username, null)
+  role_ro_name   = try(each.value.role_ro_name, null)
+  role_rw_name   = try(each.value.role_rw_name, null)
   #user_role   = local.users #merge(local.databases, local.users)
 }
