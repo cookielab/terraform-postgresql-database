@@ -14,19 +14,20 @@ locals {
     project_staging = {}
   }
 
-  #  users = {
-  #    joedoe = {
-  #      roles = [
-  #        "project_development_rw",
-  #        "project_staging_ro",
-  #      ]
-  #    }
-  #    karensmith = {
-  #      roles = [
-  #        "project_development_rw",
-  #      ]
-  #    }
-  #  }
+  users = {
+    joedoe = {
+      roles = [
+        "custom_writer",
+        "project_staging_rw",
+      ]
+    }
+    karensmith = {
+      roles = [
+        "custom_reader",
+        "project_staging_ro",
+      ]
+    }
+  }
 }
 
 provider "postgresql" {
@@ -49,5 +50,12 @@ module "database" {
   app_username   = try(each.value.app_username, null)
   role_ro_name   = try(each.value.role_ro_name, null)
   role_rw_name   = try(each.value.role_rw_name, null)
-  #user_role   = local.users #merge(local.databases, local.users)
+}
+
+module "users" {
+  for_each = local.users
+  source   = "../..//user"
+
+  username = each.key
+  roles    = each.value.roles
 }

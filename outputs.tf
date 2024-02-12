@@ -3,7 +3,7 @@ output "owner_user" {
     username = module.database.username
     password = module.database.password
   }
-  description = "Object returning database owners and their credentials"
+  description = "Object returning database owner and its credentials"
 }
 
 output "database_name" {
@@ -16,6 +16,7 @@ output "app_user" {
     username = module.access_app.rolename
     password = module.access_app.password
   }
+  description = "Object returning application user and its credentials"
 }
 
 output "roles" {
@@ -23,4 +24,5 @@ output "roles" {
     module.access_ro.rolename,
     module.access_rw.rolename,
   ]
+  description = "List of additional roles having permission on the database"
 }
