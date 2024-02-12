@@ -54,7 +54,7 @@ module "database" {
 
 module "users" {
   for_each = local.users
-  source   = "../..//user"
+  source   = "../..//modules/user"
 
   username = each.key
   roles    = each.value.roles

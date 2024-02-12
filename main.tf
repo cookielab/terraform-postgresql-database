@@ -14,14 +14,14 @@ locals {
 }
 
 module "database" {
-  source = "./database"
+  source = "./modules/database"
 
   database_name  = var.database
   owner_username = var.owner_username
 }
 
 module "access_ro" {
-  source = "./access"
+  source = "./modules/access"
 
   database_name  = var.database
   database_owner = module.database.username
@@ -33,7 +33,7 @@ module "access_ro" {
 }
 
 module "access_rw" {
-  source = "./access"
+  source = "./modules/access"
 
   database_name  = var.database
   database_owner = module.database.username
@@ -45,7 +45,7 @@ module "access_rw" {
 }
 
 module "access_app" {
-  source = "./access"
+  source = "./modules/access"
 
   database_name  = var.database
   database_owner = module.database.username
