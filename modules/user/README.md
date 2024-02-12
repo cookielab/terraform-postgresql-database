@@ -3,21 +3,19 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0, < 2.0.0 |
-| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | 1.19.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | 3.4.3 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | ~> 1.21 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
 
 Basic usage of this module is as follows:
 
 ```hcl
 module "example" {
-	 source  = "<module-path>"
-
+  	 source  = "<module-path>"
+  
 	 # Required variables
-	 access_map  = 
-	 access_user  = 
-	 db_name  = 
-	 db_owner  = 
+  	 roles  = 
+  	 username  = 
 }
 ```
 
@@ -25,21 +23,19 @@ module "example" {
 
 | Name | Type |
 |------|------|
-| [postgresql_default_privileges.sequences](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/default_privileges) | resource |
-| [postgresql_default_privileges.tables](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/default_privileges) | resource |
-| [postgresql_grant.database](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/grant) | resource |
-| [postgresql_grant.schema](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/grant) | resource |
-| [postgresql_grant.sequence](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/grant) | resource |
-| [postgresql_grant.tables](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.19.0/docs/resources/grant) | resource |
+| [postgresql_grant_role.roles](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/grant_role) | resource |
+| [postgresql_role.this](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/role) | resource |
+| [random_password.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_map"></a> [access\_map](#input\_access\_map) | n/a | <pre>object({<br>    table_rights    = list(string)<br>    sequence_rights = list(string)<br>    schema_rights   = list(string)<br>    database_rights = list(string)<br>    }<br>  )</pre> | n/a | yes |
-| <a name="input_access_user"></a> [access\_user](#input\_access\_user) | grantee user | `string` | n/a | yes |
-| <a name="input_db_name"></a> [db\_name](#input\_db\_name) | database name | `string` | n/a | yes |
-| <a name="input_db_owner"></a> [db\_owner](#input\_db\_owner) | database owner | `string` | n/a | yes |
+| <a name="input_roles"></a> [roles](#input\_roles) | user roles | `list(string)` | n/a | yes |
+| <a name="input_username"></a> [username](#input\_username) | user name | `string` | n/a | yes |
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_password"></a> [password](#output\_password) | n/a |
+| <a name="output_username"></a> [username](#output\_username) | n/a |
 <!-- END_AUTOMATED_TF_DOCS_BLOCK -->
