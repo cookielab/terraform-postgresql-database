@@ -1,5 +1,5 @@
 output "rolename" {
-  value = postgresql_role.this[0].name
+  value = var.create_role ? postgresql_role.this[0].name: null
 }
 
 output "password" {
