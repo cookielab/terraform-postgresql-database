@@ -4,6 +4,7 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0, < 2.0.0 |
+| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | ~> 1.21 |
 
 Basic usage of this module is as follows:
 
@@ -16,6 +17,8 @@ module "example" {
   
 	 # Optional variables
   	 app_username  = null
+  	 create_role_ro  = true
+  	 create_role_rw  = true
   	 owner_username  = null
   	 role_ro_name  = null
   	 role_rw_name  = null
@@ -30,6 +33,8 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_app_username"></a> [app\_username](#input\_app\_username) | Application username | `string` | `null` | no |
+| <a name="input_create_role_ro"></a> [create\_role\_ro](#input\_create\_role\_ro) | Toggle read-only role creation | `bool` | `true` | no |
+| <a name="input_create_role_rw"></a> [create\_role\_rw](#input\_create\_role\_rw) | Toggle read-write role creation | `bool` | `true` | no |
 | <a name="input_database"></a> [database](#input\_database) | Database name | `string` | n/a | yes |
 | <a name="input_owner_username"></a> [owner\_username](#input\_owner\_username) | Database owner | `string` | `null` | no |
 | <a name="input_role_ro_name"></a> [role\_ro\_name](#input\_role\_ro\_name) | Read-only role name | `string` | `null` | no |
