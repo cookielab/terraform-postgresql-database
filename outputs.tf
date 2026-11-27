@@ -3,7 +3,7 @@ output "owner_user" {
     username = module.database.username
     password = module.database.password
   }
-  description = "Object returning database owner and its credentials"
+  description = "Object returning database owner and its credentials (password is null when a write-only password is used)"
 }
 
 output "database_name" {
@@ -16,7 +16,7 @@ output "app_user" {
     username = module.access_app.rolename
     password = module.access_app.password
   }
-  description = "Object returning application user and its credentials"
+  description = "Object returning application user and its credentials (password is null when a write-only password is used)"
 }
 
 output "roles" {
