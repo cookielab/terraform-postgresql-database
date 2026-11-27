@@ -41,7 +41,7 @@ module "example" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_map"></a> [access\_map](#input\_access\_map) | n/a | <pre>object({<br>    table_rights    = list(string)<br>    sequence_rights = list(string)<br>    schema_rights   = list(string)<br>    database_rights = list(string)<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_access_map"></a> [access\_map](#input\_access\_map) | n/a | <pre>object({<br/>    table_rights    = list(string)<br/>    sequence_rights = list(string)<br/>    schema_rights   = list(string)<br/>    database_rights = list(string)<br/>    }<br/>  )</pre> | n/a | yes |
 | <a name="input_allow_login"></a> [allow\_login](#input\_allow\_login) | n/a | `bool` | n/a | yes |
 | <a name="input_create_role"></a> [create\_role](#input\_create\_role) | create role | `bool` | `false` | no |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | database name | `string` | n/a | yes |

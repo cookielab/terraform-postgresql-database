@@ -13,10 +13,10 @@ resource "postgresql_role" "owner" {
 resource "postgresql_database" "this" {
   name              = var.database_name
   owner             = postgresql_role.owner.name
-  template          = "template0"
-  lc_collate        = "en_US.UTF-8"
-  lc_ctype          = "en_US.UTF-8"
-  encoding          = "UTF8"
+  template          = var.template
+  lc_collate        = var.lc_collate
+  lc_ctype          = var.lc_ctype
+  encoding          = var.encoding
   connection_limit  = -1
   allow_connections = true
 }

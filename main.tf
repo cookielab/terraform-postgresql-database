@@ -18,6 +18,10 @@ module "database" {
 
   database_name  = var.database
   owner_username = var.owner_username
+  template       = var.template
+  encoding       = var.encoding
+  lc_collate     = var.lc_collate
+  lc_ctype       = var.lc_ctype
 }
 
 module "access_ro" {

@@ -17,7 +17,11 @@ module "example" {
   	 database_name  = 
   
 	 # Optional variables
+  	 encoding  = "UTF8"
+  	 lc_collate  = "en_US.UTF-8"
+  	 lc_ctype  = "en_US.UTF-8"
   	 owner_username  = null
+  	 template  = "template0"
 }
 ```
 
@@ -34,8 +38,12 @@ module "example" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_database_name"></a> [database\_name](#input\_database\_name) | n/a | `string` | n/a | yes |
-| <a name="input_owner_username"></a> [owner\_username](#input\_owner\_username) | n/a | `string` | `null` | no |
+| <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Database name | `string` | n/a | yes |
+| <a name="input_encoding"></a> [encoding](#input\_encoding) | Character set encoding of the database. Changing it replaces the database. | `string` | `"UTF8"` | no |
+| <a name="input_lc_collate"></a> [lc\_collate](#input\_lc\_collate) | Collation order (LC\_COLLATE) of the database. Changing it replaces the database. | `string` | `"en_US.UTF-8"` | no |
+| <a name="input_lc_ctype"></a> [lc\_ctype](#input\_lc\_ctype) | Character classification (LC\_CTYPE) of the database. Changing it replaces the database. | `string` | `"en_US.UTF-8"` | no |
+| <a name="input_owner_username"></a> [owner\_username](#input\_owner\_username) | Database owner role name, defaults to `<database_name>_migrator` | `string` | `null` | no |
+| <a name="input_template"></a> [template](#input\_template) | Template database the database is created from. Changing it replaces the database. | `string` | `"template0"` | no |
 ## Outputs
 
 | Name | Description |
