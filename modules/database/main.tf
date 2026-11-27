@@ -1,13 +1,21 @@
+locals {
+  password_write_only = var.password_wo_version != null
+}
+
 resource "random_password" "owner" {
+  count = local.password_write_only ? 0 : 1
+
   length           = 32
   special          = false
   override_special = "_%"
 }
 
 resource "postgresql_role" "owner" {
-  name     = var.owner_username == null ? "${var.database_name}_migrator" : var.owner_username
-  login    = true
-  password = random_password.owner.result
+  name                = var.owner_username == null ? "${var.database_name}_migrator" : var.owner_username
+  login               = true
+  password            = local.password_write_only ? null : random_password.owner[0].result
+  password_wo         = local.password_write_only ? var.password_wo : null
+  password_wo_version = var.password_wo_version
 }
 
 resource "postgresql_database" "this" {

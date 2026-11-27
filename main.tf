@@ -23,6 +23,9 @@ module "database" {
   lc_collate     = var.lc_collate
   lc_ctype       = var.lc_ctype
   schemas        = var.schemas
+
+  password_wo         = var.owner_password_wo
+  password_wo_version = var.owner_password_wo_version
 }
 
 # The access modules run one after another (ro -> rw -> app): the provider locks
@@ -66,6 +69,9 @@ module "access_app" {
   create_role    = true
   allow_login    = true
   access_map     = local.access_map_rw
+
+  password_wo         = var.app_password_wo
+  password_wo_version = var.app_password_wo_version
 
   depends_on = [module.access_rw]
 }

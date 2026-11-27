@@ -1,9 +1,10 @@
 locals {
-  role_name = var.create_role ? postgresql_role.this[0].name : var.role_name
+  password_write_only = var.password_wo_version != null
+  role_name           = var.create_role ? postgresql_role.this[0].name : var.role_name
 }
 
 resource "random_password" "this" {
-  count = var.allow_login ? 1 : 0
+  count = var.allow_login && !local.password_write_only ? 1 : 0
 
   length           = 32
   special          = false
@@ -13,9 +14,11 @@ resource "random_password" "this" {
 resource "postgresql_role" "this" {
   count = var.create_role ? 1 : 0
 
-  name     = var.role_name
-  login    = var.allow_login
-  password = var.allow_login ? random_password.this[0].result : null
+  name                = var.role_name
+  login               = var.allow_login
+  password            = var.allow_login && !local.password_write_only ? random_password.this[0].result : null
+  password_wo         = var.allow_login && local.password_write_only ? var.password_wo : null
+  password_wo_version = var.allow_login ? var.password_wo_version : null
 }
 
 resource "postgresql_grant" "tables" {

@@ -58,6 +58,11 @@ run "database_defaults" {
     condition     = output.schemas == { public = "public" }
     error_message = "Default schemas must be public only."
   }
+
+  assert {
+    condition     = length(random_password.owner) == 1 && postgresql_role.owner.password_wo_version == null
+    error_message = "Without a write-only version the generated password must be used."
+  }
 }
 
 run "database_schemas_and_locale" {
@@ -189,4 +194,252 @@ run "access_schemas_empty" {
   }
 
   expect_failures = [var.schemas]
+}
+
+run "write_only_passwords" {
+  command = plan
+
+  module {
+    source = "./tests/fixtures/root"
+  }
+
+  variables {
+    owner_password_wo         = "owner-secret"
+    owner_password_wo_version = "1"
+    app_password_wo           = "app-secret"
+    app_password_wo_version   = "1"
+  }
+
+  assert {
+    condition     = nonsensitive(output.owner_user.password == null && output.app_user.password == null)
+    error_message = "Passwords must not be returned when write-only passwords are used."
+  }
+}
+
+# Same arguments as the root module passes to module.access_app.
+run "write_only_password_access_app" {
+  command = plan
+
+  module {
+    source = "./modules/access"
+  }
+
+  variables {
+    database_name       = "app"
+    database_owner      = "app_migrator"
+    role_name           = "app_app"
+    create_role         = true
+    allow_login         = true
+    password_wo         = "app-secret"
+    password_wo_version = "1"
+    access_map = {
+      table_rights    = ["SELECT"]
+      sequence_rights = ["USAGE"]
+      schema_rights   = ["USAGE"]
+      database_rights = ["CONNECT"]
+    }
+  }
+
+  assert {
+    condition     = length(random_password.this) == 0
+    error_message = "No random_password must be created for the app role in write-only mode."
+  }
+
+  assert {
+    condition     = postgresql_role.this[0].password == null && postgresql_role.this[0].password_wo_version == "1"
+    error_message = "The app role must use password_wo instead of password."
+  }
+
+  assert {
+    condition     = output.password == null
+    error_message = "The app role password must not be returned in write-only mode."
+  }
+}
+
+run "write_only_password_database_module" {
+  command = plan
+
+  module {
+    source = "./modules/database"
+  }
+
+  variables {
+    database_name       = "app"
+    password_wo         = "owner-secret"
+    password_wo_version = "1"
+  }
+
+  assert {
+    condition     = length(random_password.owner) == 0
+    error_message = "No random_password must be stored in state in write-only mode."
+  }
+
+  assert {
+    condition     = postgresql_role.owner.password == null && postgresql_role.owner.password_wo_version == "1"
+    error_message = "The role must use password_wo instead of password."
+  }
+}
+
+run "write_only_password_requires_both" {
+  command = plan
+
+  module {
+    source = "./modules/user"
+  }
+
+  variables {
+    username            = "joe"
+    roles               = []
+    password_wo_version = "1"
+  }
+
+  expect_failures = [var.password_wo_version]
+}
+
+# Root module variables are validated in runs without a module block, i.e. against
+# the root module itself. A root module cannot output sensitive values, so the runs
+# also make the owner (and app) password inputs invalid on purpose: that stops
+# Terraform before it evaluates the owner_user / app_user outputs. Every listed
+# expected failure must occur for a run to pass.
+run "root_owner_password_wo_requires_both" {
+  command = plan
+
+  variables {
+    app_password_wo           = "app-secret"
+    app_password_wo_version   = "1"
+    owner_password_wo_version = "1"
+  }
+
+  expect_failures = [var.owner_password_wo_version]
+}
+
+run "root_owner_password_wo_not_empty" {
+  command = plan
+
+  variables {
+    app_password_wo           = "app-secret"
+    app_password_wo_version   = "1"
+    owner_password_wo         = ""
+    owner_password_wo_version = "1"
+  }
+
+  expect_failures = [var.owner_password_wo]
+}
+
+run "root_app_password_wo_requires_both" {
+  command = plan
+
+  variables {
+    owner_password_wo_version = "1"
+    app_password_wo           = "app-secret"
+  }
+
+  expect_failures = [var.app_password_wo_version, var.owner_password_wo_version]
+}
+
+run "root_app_password_wo_not_empty" {
+  command = plan
+
+  variables {
+    owner_password_wo_version = "1"
+    app_password_wo           = ""
+    app_password_wo_version   = "1"
+  }
+
+  expect_failures = [var.app_password_wo, var.owner_password_wo_version]
+}
+
+run "root_schemas_empty" {
+  command = plan
+
+  variables {
+    owner_password_wo_version = "1"
+    app_password_wo_version   = "1"
+    schemas                   = []
+  }
+
+  expect_failures = [var.schemas, var.owner_password_wo_version, var.app_password_wo_version]
+}
+
+run "root_schemas_blank_name" {
+  command = plan
+
+  variables {
+    owner_password_wo_version = "1"
+    app_password_wo_version   = "1"
+    schemas                   = ["public", " "]
+  }
+
+  expect_failures = [var.schemas, var.owner_password_wo_version, var.app_password_wo_version]
+}
+
+run "root_schemas_duplicate" {
+  command = plan
+
+  variables {
+    owner_password_wo_version = "1"
+    app_password_wo_version   = "1"
+    schemas                   = ["public", "app", "app"]
+  }
+
+  expect_failures = [var.schemas, var.owner_password_wo_version, var.app_password_wo_version]
+}
+
+run "access_password_wo_not_empty" {
+  command = plan
+
+  module {
+    source = "./modules/access"
+  }
+
+  variables {
+    database_name       = "app"
+    database_owner      = "app_migrator"
+    role_name           = "app_app"
+    create_role         = true
+    allow_login         = true
+    password_wo         = ""
+    password_wo_version = "1"
+    access_map = {
+      table_rights    = ["SELECT"]
+      sequence_rights = ["USAGE"]
+      schema_rights   = ["USAGE"]
+      database_rights = ["CONNECT"]
+    }
+  }
+
+  expect_failures = [var.password_wo]
+}
+
+run "database_password_wo_not_empty" {
+  command = plan
+
+  module {
+    source = "./modules/database"
+  }
+
+  variables {
+    database_name       = "app"
+    password_wo         = ""
+    password_wo_version = "1"
+  }
+
+  expect_failures = [var.password_wo]
+}
+
+run "user_password_wo_not_empty" {
+  command = plan
+
+  module {
+    source = "./modules/user"
+  }
+
+  variables {
+    username            = "joe"
+    roles               = []
+    password_wo         = ""
+    password_wo_version = "1"
+  }
+
+  expect_failures = [var.password_wo]
 }

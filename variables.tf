@@ -83,3 +83,51 @@ variable "schemas" {
     error_message = "schemas must not contain duplicates."
   }
 }
+
+variable "owner_password_wo" {
+  default     = null
+  type        = string
+  sensitive   = true
+  ephemeral   = true
+  description = "Write-only password of the database owner, used together with `owner_password_wo_version`. It is not stored in state and `owner_user.password` is null then. Requires Terraform >= 1.11."
+
+  validation {
+    condition     = var.owner_password_wo == null || var.owner_password_wo != ""
+    error_message = "owner_password_wo must not be empty."
+  }
+}
+
+variable "owner_password_wo_version" {
+  default     = null
+  type        = string
+  description = "Version of the write-only owner password. Setting it switches the owner to `owner_password_wo`; change it to write a new password. Null keeps the generated password stored in state."
+
+  validation {
+    condition     = (var.owner_password_wo_version == null) == (var.owner_password_wo == null)
+    error_message = "Set both owner_password_wo and owner_password_wo_version, or neither."
+  }
+}
+
+variable "app_password_wo" {
+  default     = null
+  type        = string
+  sensitive   = true
+  ephemeral   = true
+  description = "Write-only password of the application user, used together with `app_password_wo_version`. It is not stored in state and `app_user.password` is null then. Requires Terraform >= 1.11."
+
+  validation {
+    condition     = var.app_password_wo == null || var.app_password_wo != ""
+    error_message = "app_password_wo must not be empty."
+  }
+}
+
+variable "app_password_wo_version" {
+  default     = null
+  type        = string
+  description = "Version of the write-only application user password. Setting it switches the user to `app_password_wo`; change it to write a new password. Null keeps the generated password stored in state."
+
+  validation {
+    condition     = (var.app_password_wo_version == null) == (var.app_password_wo == null)
+    error_message = "Set both app_password_wo and app_password_wo_version, or neither."
+  }
+}
