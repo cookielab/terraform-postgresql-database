@@ -22,6 +22,9 @@ module "example" {
   
 	 # Optional variables
   	 create_role  = false
+  	 schemas  = {
+  "public": "public"
+}
 }
 ```
 
@@ -47,6 +50,7 @@ module "example" {
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | database name | `string` | n/a | yes |
 | <a name="input_database_owner"></a> [database\_owner](#input\_database\_owner) | database owner | `string` | n/a | yes |
 | <a name="input_role_name"></a> [role\_name](#input\_role\_name) | grantee user | `string` | n/a | yes |
+| <a name="input_schemas"></a> [schemas](#input\_schemas) | Schemas to grant access to, map of key => schema name. Pass references to the schema resources (e.g. the `schemas` output of the database module) so the grants wait for the schemas. | `map(string)` | <pre>{<br/>  "public": "public"<br/>}</pre> | no |
 ## Outputs
 
 | Name | Description |

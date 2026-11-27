@@ -21,6 +21,9 @@ module "example" {
   	 lc_collate  = "en_US.UTF-8"
   	 lc_ctype  = "en_US.UTF-8"
   	 owner_username  = null
+  	 schemas  = [
+  "public"
+]
   	 template  = "template0"
 }
 ```
@@ -33,6 +36,7 @@ module "example" {
 | [postgresql_extension.pg_trgm](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/extension) | resource |
 | [postgresql_extension.uuid_ossp](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/extension) | resource |
 | [postgresql_role.owner](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/role) | resource |
+| [postgresql_schema.this](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/schema) | resource |
 | [random_password.owner](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 ## Inputs
 
@@ -43,6 +47,7 @@ module "example" {
 | <a name="input_lc_collate"></a> [lc\_collate](#input\_lc\_collate) | Collation order (LC\_COLLATE) of the database. Changing it replaces the database. | `string` | `"en_US.UTF-8"` | no |
 | <a name="input_lc_ctype"></a> [lc\_ctype](#input\_lc\_ctype) | Character classification (LC\_CTYPE) of the database. Changing it replaces the database. | `string` | `"en_US.UTF-8"` | no |
 | <a name="input_owner_username"></a> [owner\_username](#input\_owner\_username) | Database owner role name, defaults to `<database_name>_migrator` | `string` | `null` | no |
+| <a name="input_schemas"></a> [schemas](#input\_schemas) | Schemas of the database. Every schema except `public` (which exists in every database) is created and owned by the owner role. | `list(string)` | <pre>[<br/>  "public"<br/>]</pre> | no |
 | <a name="input_template"></a> [template](#input\_template) | Template database the database is created from. Changing it replaces the database. | `string` | `"template0"` | no |
 ## Outputs
 
@@ -50,5 +55,6 @@ module "example" {
 |------|-------------|
 | <a name="output_database_name"></a> [database\_name](#output\_database\_name) | n/a |
 | <a name="output_password"></a> [password](#output\_password) | n/a |
+| <a name="output_schemas"></a> [schemas](#output\_schemas) | Map of schema names, values reference the created schemas so that grants depend on them |
 | <a name="output_username"></a> [username](#output\_username) | n/a |
 <!-- END_AUTOMATED_TF_DOCS_BLOCK -->

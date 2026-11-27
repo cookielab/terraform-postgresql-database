@@ -10,3 +10,8 @@ output "password" {
 output "database_name" {
   value = postgresql_database.this.name
 }
+
+output "schemas" {
+  value       = { for schema in var.schemas : schema => schema == "public" ? schema : postgresql_schema.this[schema].name }
+  description = "Map of schema names, values reference the created schemas so that grants depend on them"
+}

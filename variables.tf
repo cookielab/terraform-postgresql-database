@@ -62,3 +62,24 @@ variable "lc_ctype" {
   type        = string
   description = "Character classification (LC_CTYPE) of the database. Changing it replaces the database."
 }
+
+variable "schemas" {
+  default     = ["public"]
+  type        = list(string)
+  description = "Schemas the roles get access to (grants on existing tables and sequences plus default privileges for objects created by the owner). Every schema except `public` is created and owned by the database owner."
+
+  validation {
+    condition     = length(var.schemas) > 0
+    error_message = "schemas must contain at least one schema."
+  }
+
+  validation {
+    condition     = alltrue([for schema in var.schemas : try(trimspace(schema), "") != ""])
+    error_message = "schemas must not contain empty names."
+  }
+
+  validation {
+    condition     = length(var.schemas) == length(distinct(var.schemas))
+    error_message = "schemas must not contain duplicates."
+  }
+}

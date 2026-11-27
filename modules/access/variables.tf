@@ -32,3 +32,14 @@ variable "access_map" {
     }
   )
 }
+
+variable "schemas" {
+  type        = map(string)
+  default     = { public = "public" }
+  description = "Schemas to grant access to, map of key => schema name. Pass references to the schema resources (e.g. the `schemas` output of the database module) so the grants wait for the schemas."
+
+  validation {
+    condition     = length(var.schemas) > 0
+    error_message = "schemas must contain at least one schema."
+  }
+}

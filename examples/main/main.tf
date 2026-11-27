@@ -11,7 +11,9 @@ locals {
       role_ro_name = "custom_reader"
       role_rw_name = "custom_writer"
     }
-    project_staging = {}
+    project_staging = {
+      schemas = ["public", "app"]
+    }
   }
 
   users = {
@@ -50,6 +52,7 @@ module "database" {
   app_username   = try(each.value.app_username, null)
   role_ro_name   = try(each.value.role_ro_name, null)
   role_rw_name   = try(each.value.role_rw_name, null)
+  schemas        = try(each.value.schemas, ["public"])
 }
 
 module "users" {

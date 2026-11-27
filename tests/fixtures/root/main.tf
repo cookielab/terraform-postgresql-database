@@ -4,10 +4,16 @@ module "this" {
   source = "../../.."
 
   database = var.database
+  schemas  = var.schemas
 }
 
 variable "database" {
   type = string
+}
+
+variable "schemas" {
+  type    = list(string)
+  default = ["public"]
 }
 
 output "database_name" {

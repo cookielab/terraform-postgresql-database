@@ -30,3 +30,11 @@ resource "postgresql_extension" "uuid_ossp" {
   name     = "uuid-ossp"
   database = postgresql_database.this.name
 }
+
+resource "postgresql_schema" "this" {
+  for_each = toset([for schema in var.schemas : schema if schema != "public"])
+
+  name     = each.key
+  database = postgresql_database.this.name
+  owner    = postgresql_role.owner.name
+}

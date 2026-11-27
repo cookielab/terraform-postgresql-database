@@ -1,3 +1,23 @@
+# terraform-postgresql-database
+
+Creates a PostgreSQL database with an owner role (`<database>_migrator`), an application role (`<database>_app`) and
+read-only / read-write roles (`<database>_ro`, `<database>_rw`).
+
+## Schemas
+
+`schemas` (default `["public"]`) lists the schemas the roles get access to: grants on existing tables and sequences and
+default privileges for tables and sequences created later by the owner role. Every schema except `public` is created
+and owned by the owner role.
+
+```hcl
+module "database" {
+  source = "cookielab/database/postgresql"
+
+  database = "app"
+  schemas  = ["public", "app"]
+}
+```
+
 <!-- BEGIN_AUTOMATED_TF_DOCS_BLOCK -->
 ## Requirements
 
@@ -25,6 +45,9 @@ module "example" {
   	 owner_username  = null
   	 role_ro_name  = null
   	 role_rw_name  = null
+  	 schemas  = [
+  "public"
+]
   	 template  = "template0"
 }
 ```
@@ -46,6 +69,7 @@ No resources.
 | <a name="input_owner_username"></a> [owner\_username](#input\_owner\_username) | Database owner | `string` | `null` | no |
 | <a name="input_role_ro_name"></a> [role\_ro\_name](#input\_role\_ro\_name) | Read-only role name | `string` | `null` | no |
 | <a name="input_role_rw_name"></a> [role\_rw\_name](#input\_role\_rw\_name) | Read-write role name | `string` | `null` | no |
+| <a name="input_schemas"></a> [schemas](#input\_schemas) | Schemas the roles get access to (grants on existing tables and sequences plus default privileges for objects created by the owner). Every schema except `public` is created and owned by the database owner. | `list(string)` | <pre>[<br/>  "public"<br/>]</pre> | no |
 | <a name="input_template"></a> [template](#input\_template) | Template database the database is created from. Changing it replaces the database. | `string` | `"template0"` | no |
 ## Outputs
 

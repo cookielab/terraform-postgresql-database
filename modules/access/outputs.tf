@@ -3,5 +3,6 @@ output "rolename" {
 }
 
 output "password" {
-  value = var.allow_login ? postgresql_role.this[0].password : null
+  value     = var.allow_login ? postgresql_role.this[0].password : null
+  sensitive = true
 }

@@ -32,3 +32,24 @@ variable "lc_ctype" {
   default     = "en_US.UTF-8"
   description = "Character classification (LC_CTYPE) of the database. Changing it replaces the database."
 }
+
+variable "schemas" {
+  type        = list(string)
+  default     = ["public"]
+  description = "Schemas of the database. Every schema except `public` (which exists in every database) is created and owned by the owner role."
+
+  validation {
+    condition     = length(var.schemas) > 0
+    error_message = "schemas must contain at least one schema."
+  }
+
+  validation {
+    condition     = alltrue([for schema in var.schemas : try(trimspace(schema), "") != ""])
+    error_message = "schemas must not contain empty names."
+  }
+
+  validation {
+    condition     = length(var.schemas) == length(distinct(var.schemas))
+    error_message = "schemas must not contain duplicates."
+  }
+}
